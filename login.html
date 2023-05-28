@@ -40,18 +40,18 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-6 pt-3 text-center">
-                                        <button type="submit" class="btn btn-primary">Login</button>
+                                        <button type="submit" class="btn btn-secondary">Login</button>
                                     </div>
                                     <div class="col-6 pt-3 text-center">
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal">
+                                        <button type="button" class="btn btn-secondary text-light"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             Register
                                         </button>
                                     </div>
                                 </div>
                             </form>
                             <!-- Modal -->
-                            <form name="register" method="POST">
+                            <form id="register" name="register" method="POST">
                                 <div class="modal fade" id="exampleModal" tabindex="-1"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div
@@ -66,29 +66,34 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-6"><input type="text" placeholder="Name" />
+                                                        <div class="row mb-3">
+                                                            <div class="col-6"><input type="text" placeholder="Name"
+                                                                    id="name" />
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-6"><input type="text" placeholder="Email" />
+                                                        <div class="row mb-3">
+                                                            <div class="col-6"><input type="text" placeholder="Email"
+                                                                    id="email" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <div class="col-6"><input type="text" placeholder="Password"
+                                                                    id="password" />
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-6"><input type="text"
-                                                                    placeholder="Password" /></div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-6"><input type="text"
-                                                                    placeholder="Confirm password" /></div>
+                                                                    placeholder="Confirm password"
+                                                                    id="passwordConfirm" />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div
                                                     class="modal-footer text-center align-items-center justify-content-center">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-primary"
+                                                    <!-- <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Cancel</button> -->
+                                                    <button type="submit" class="btn btn-secondary"
                                                         name="register">Register</button>
                                                 </div>
                                             </div>
@@ -98,10 +103,14 @@
                             </form> <!-- epic -->
                         </div>
                     </div>
+                    <div class="container text-secondary text-center justify-content-center align-items-center">
+                        <span id="response"></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
@@ -114,37 +123,110 @@
                 // Get the form input values
                 var username = document.getElementById('username').value;
                 var password = document.getElementById('password').value;
+                document.getElementById('response').innerText = "";
 
                 // Create the request payload
                 var data = {
-                    username,
-                    password
+                    username: username,
+                    password: password
                 };
 
                 // Make the HTTP request to the login endpoint
-                fetch(`http://test23.somee.com/publish/Account/Login?username=${username}&password=${password}`, { // not ideal
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
+                // fetch(`http://test23.somee.com/publish/Account/Login`, { // not ideal ?username=${username}&password=${password} // 
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify(data)
+                // })
+                // Create the URL with the query parameters
+                var url = 'http://test23.somee.com/publish/Account/Login?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password);
+
+                // Make the HTTP request to the API
+                fetch(url, { method: "POST" })
                     .then(function (response) {
                         if (response.ok) {
+                            // delay, response text, redirect?
                             console.log("LOGIN SUCCESSFUL");
-                            // Login successful
-                            // Redirect the user or perform other actions
-                            // window.location.href = "http://daliborg.8u.cz/Chatrum";
+                            //document.getElementById('response').innerText = toString(response);
+                            responseText = response.text();
+                            //console.log(data);
+                            //console.log(response.statusText);
+                            //console.log(responseText);
+                            setTimeout(function () {
+                                //window.location.href = "http://daliborg.8u.cz/Chatrum";
+                            }, 1000);
+                            return responseText;
                         } else {
+                            // Handle error response
                             console.log("LOGIN FAILED");
-                            // Login failed
-                            // Handle the error and display an appropriate message to the user
+                            responseText = response.text();
+                            document.getElementById('response').innerText = responseText
+                            console.log(responseText);
+                            throw new Error('Error: ' + response.status);
                         }
+                    })
+                    .then(function (data) {
+                        // Handle the response data
+                        console.log(data);
+                        document.getElementById('response').innerText = data;
                     })
                     .catch(function (error) {
                         // Handle any network or other errors
+                        console.error(error);
+                        document.getElementById('response').innerText = error;
                     });
             });
+        });
+
+
+        // register click, az potom tohle
+        document.getElementById('register').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Get the form input values
+            var username = document.getElementById('username').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var passwordConfirm = document.getElementById('passwordConfirm').value;
+
+            // Create the request payload
+            var data = {
+                username: username,
+                password: password
+            };
+
+            // Make the HTTP request to the login endpoint
+            fetch(`http://test23.somee.com/publish/Account/Register`, { // not ideal ?username=${username}&password=${password}
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(function (response) {
+                    if (response.ok) {
+                        console.log("REGISTRATION SUCCESSFUL");
+                        document.getElementById('response').innerText = toString(response);
+                        console.log(toString(response));
+                        // Login successful
+                        // Redirect the user or perform other actions
+                        //window.location.href = "http://daliborg.8u.cz/Chatrum";
+                    } else {
+                        console.log("REGISTRATION FAILED");
+                        //document.getElementById('response').innerText = toString(response);
+                        // Login failed
+                        // Handle the error and display an appropriate message to the user
+                    }
+                })
+                .then(function (data) {
+                    // Handle the response data
+                    console.log(data);
+                    document.getElementById('response').innerText = data;
+                })
+                .catch(function (error) {
+                    // Handle any network or other errors
+                });
         });
     </script>
 </body>

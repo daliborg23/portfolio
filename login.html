@@ -68,23 +68,23 @@
                                                     <div class="container">
                                                         <div class="row mb-3">
                                                             <div class="col-6"><input type="text" placeholder="Name"
-                                                                    id="name" />
+                                                                    id="usernameReg" />
                                                             </div>
                                                         </div>
                                                         <div class="row mb-3">
                                                             <div class="col-6"><input type="text" placeholder="Email"
-                                                                    id="email" />
+                                                                    id="emailReg" />
                                                             </div>
                                                         </div>
                                                         <div class="row mb-3">
                                                             <div class="col-6"><input type="text" placeholder="Password"
-                                                                    id="password" />
+                                                                    id="passwordReg" />
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-6"><input type="text"
                                                                     placeholder="Confirm password"
-                                                                    id="passwordConfirm" />
+                                                                    id="confirmPasswordReg" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -118,61 +118,51 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             document.getElementById('login').addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent the default form submission
+                event.preventDefault();
 
-                // Get the form input values
                 var username = document.getElementById('username').value;
                 var password = document.getElementById('password').value;
                 document.getElementById('response').innerText = "";
 
-                // Create the request payload
                 var data = {
                     username: username,
                     password: password
                 };
 
                 // Make the HTTP request to the login endpoint
-                // fetch(`http://test23.somee.com/publish/Account/Login`, { // not ideal ?username=${username}&password=${password} // 
+                // fetch(`http://test23.somee.com/publish/Account/Login`, { // not ideal ?username=${username}&password=${password} // musim predelat vstup dat na json ze stringu
                 //     method: 'POST',
                 //     headers: {
                 //         'Content-Type': 'application/json'
                 //     },
                 //     body: JSON.stringify(data)
                 // })
-                // Create the URL with the query parameters
+
+                // tady bych mel spis posilat json, a proc je to post ale stejne to posila jako get?
                 var url = 'http://test23.somee.com/publish/Account/Login?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password);
 
-                // Make the HTTP request to the API
                 fetch(url, { method: "POST" })
                     .then(function (response) {
                         if (response.ok) {
-                            // delay, response text, redirect?
                             console.log("LOGIN SUCCESSFUL");
-                            //document.getElementById('response').innerText = toString(response);
                             responseText = response.text();
-                            //console.log(data);
-                            //console.log(response.statusText);
-                            //console.log(responseText);
+                            console.log(responseText);
                             setTimeout(function () {
-                                //window.location.href = "http://daliborg.8u.cz/Chatrum";
+                                window.location.href = "http://daliborg.8u.cz/Chatrum";
                             }, 1000);
                             return responseText;
                         } else {
-                            // Handle error response
                             console.log("LOGIN FAILED");
                             responseText = response.text();
-                            document.getElementById('response').innerText = responseText
                             console.log(responseText);
                             throw new Error('Error: ' + response.status);
                         }
                     })
                     .then(function (data) {
-                        // Handle the response data
                         console.log(data);
                         document.getElementById('response').innerText = data;
                     })
                     .catch(function (error) {
-                        // Handle any network or other errors
                         console.error(error);
                         document.getElementById('response').innerText = error;
                     });
@@ -182,22 +172,21 @@
 
         // register click, az potom tohle
         document.getElementById('register').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
-            // Get the form input values
-            var username = document.getElementById('username').value;
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
-            var passwordConfirm = document.getElementById('passwordConfirm').value;
+            var usernameReg = document.getElementById('usernameReg').value;
+            var emailReg = document.getElementById('emailReg').value;
+            var passwordReg = document.getElementById('passwordReg').value;
+            var confirmPasswordReg = document.getElementById('confirmPasswordReg').value;
 
-            // Create the request payload
             var data = {
-                username: username,
-                password: password
+                name: usernameReg,
+                email: emailReg,
+                password: passwordReg,
+                confirmPassword: confirmPasswordReg
             };
 
-            // Make the HTTP request to the login endpoint
-            fetch(`http://test23.somee.com/publish/Account/Register`, { // not ideal ?username=${username}&password=${password}
+            fetch(`http://test23.somee.com/publish/Account/Register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -207,25 +196,21 @@
                 .then(function (response) {
                     if (response.ok) {
                         console.log("REGISTRATION SUCCESSFUL");
-                        document.getElementById('response').innerText = toString(response);
-                        console.log(toString(response));
-                        // Login successful
-                        // Redirect the user or perform other actions
+                        responseText = response.text();
+                        document.getElementById('response').innerText = responseText;
                         //window.location.href = "http://daliborg.8u.cz/Chatrum";
                     } else {
                         console.log("REGISTRATION FAILED");
-                        //document.getElementById('response').innerText = toString(response);
-                        // Login failed
-                        // Handle the error and display an appropriate message to the user
+                        document.getElementById('response').innerText = responseText;
                     }
                 })
                 .then(function (data) {
-                    // Handle the response data
                     console.log(data);
                     document.getElementById('response').innerText = data;
                 })
                 .catch(function (error) {
-                    // Handle any network or other errors
+                    console.log(error);
+                    document.getElementById('response').innerText = error;
                 });
         });
     </script>

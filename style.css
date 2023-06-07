@@ -1,3 +1,8 @@
+html {
+  scroll-padding-top: 40px;
+  scroll-behavior: smooth;
+}
+
 body {
   background-image: url(images/IMG_1811.JPG);
   background-size: cover;
@@ -18,16 +23,24 @@ h2 {
 }
 
 #home {
-  height: 420px;
+  height: 320px;
   width: 100%;
 }
 
-.intro {
+.intro1 {
   position: absolute;
-  top: 20vh;
+  top: 7vh;
+  left: 4vw;
+  margin: 0 auto;
+  font-size: 1.5rem;
+}
+
+.intro2 {
+  position: absolute;
+  top: 12vh;
   left: 30vw;
   margin: 0 auto;
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
 #about,
@@ -36,16 +49,21 @@ h2 {
 #hobbies,
 #contact {
   padding: 15px;
-  background: hsla(0, 0%, 100%, 0.87);
+  background: hsla(0, 0%, 100%, 0.65);
   margin-bottom: 100px;
-  box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),
-    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255, 0.5),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.4);
 }
 
-.about > p,
-.hobbies > p {
+.about>p,
+.hobbies>p {
   line-height: 1.8;
-  padding: 75px;
+  padding: 23px;
+  border: 1px solid black;
+  border-radius: 15px;
+  background-color: white;
+  overflow: auto;
+  display: block;
 }
 
 .img {
@@ -56,56 +74,92 @@ h2 {
   margin-bottom: 0px;
 }
 
-.card {
-  margin: 20px;
-}
-
-li > img {
-  margin-right: 5px;
-}
-
-.flex {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  margin: 15px;
-  opacity: 1;
-}
 
 fieldset {
   border: 1px solid black;
   border-radius: 6px;
-  padding: 5px;
-  margin: 10 auto;
-  display: flex;
-  justify-content: space-evenly;
+  padding: 10px;
+  margin: 4px;
   background-color: white;
+  margin-inline: 2px;
+  padding-block: 0em 0em;
+  padding-inline: 0em;
+  min-inline-size: min-content;
+  min-width: auto;
+  display: inline-block;
+  max-width: max-content;
 }
+
 
 legend {
-  padding: 6px;
+  font-size: 1.5rem;
+  display: inline-block;
+  padding: 4px 8px;
+  border-bottom: 1px solid black;
+  border-radius: 6px;
+  font-size: 15px;
   text-align: center;
+  margin: 0;
 }
 
-figure {
+
+/* figure {
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  padding: 10px;
-  margin: 10px;
+  padding: 5px;
+  margin: 5px;
   align-items: center;
+} */
+
+figure {
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
-figure > img {
+figure img {
+  display: inline-block;
   text-align: center;
+  margin: 5px;
+  width: 52px;
+  height: 52px;
+}
+
+.imgtop {
   margin: 0 auto;
+  width: 100%;
+  height: 190px;
+}
+
+.card-body a {
+  text-decoration: none;
+}
+
+.card-body a:hover {
+  text-decoration: underline;
+}
+
+.card-footer img {
+  margin: 0 auto;
+  width: 40px;
+  height: 40px;
 }
 
 figcaption {
-  padding: 10px;
+  padding: 5px;
+  text-align: center;
 }
 
-.carousel.slide > .carousel-inner > .carousel-item > img {
+.carousel.slide>.carousel-inner>.carousel-item>img {
   width: 640px;
   height: 360px;
+}
+
+textarea {
+  height: 100px !important;
+}
+
+.required {
+  color: red;
 }

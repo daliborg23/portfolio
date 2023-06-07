@@ -16,6 +16,11 @@
 
 <body>
     <div class="vh-100 d-flex justify-content-center align-items-center bg-dark">
+        <h6 class="text-secondary position-absolute top-0 start-50 translate-middle-x">For testing purposes, use
+            Username: testtesttest666 /
+            Password:
+            testtesttest666^Y
+        </h6>
         <div class="container" data-bs-theme="dark">
             <div class="row justify-content-center">
                 <div class="col-md-3">
@@ -103,8 +108,9 @@
                             </form> <!-- epic -->
                         </div>
                     </div>
-                    <div class="container text-secondary text-center justify-content-center align-items-center">
-                        <span id="response"></span>
+                    <div
+                        class="container text-secondary text-center justify-content-center align-items-center text-break">
+                        <p id="response"></p>
                     </div>
                 </div>
             </div>
@@ -125,7 +131,7 @@
                 document.getElementById('response').innerText = "";
 
                 var data = {
-                    username: username,
+                    name: username,
                     password: password
                 };
 
@@ -139,18 +145,27 @@
                 // })
 
                 // tady bych mel spis posilat json, a proc je to post ale stejne to posila jako get?
-                var url = 'http://test23.somee.com/publish/Account/Login?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password);
+                //var url = 'https://localhost:7251/Account/Login';
+                //var url = 'http://test23.somee.com/publish/Account/Login'; //?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password); 
+                var url = 'https://test23.somee.com/publish/Account/Login';
+                //var url = 'https://localhost:7251/Account/Login';
 
-                fetch(url, { method: "POST" })
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
                     .then(function (response) {
                         if (response.ok) {
                             console.log("LOGIN SUCCESSFUL");
-                            responseText = response.text();
-                            console.log(responseText);
+                            document.getElementById('response').innerText = response.statusText;
                             setTimeout(function () {
-                                window.location.href = "http://daliborg.8u.cz/Chatrum";
+                                //window.location.href = "http://daliborg.8u.cz/Chatrum";
+                                window.location.href = "Chatrum/index.html";
                             }, 1000);
-                            return responseText;
+                            return response.json(); // ?
                         } else {
                             console.log("LOGIN FAILED");
                             responseText = response.text();
@@ -159,8 +174,9 @@
                         }
                     })
                     .then(function (data) {
+                        sessionStorage.setItem('token', data.token);
                         console.log(data);
-                        document.getElementById('response').innerText = data;
+                        //document.getElementById('response').innerText = data.token;
                     })
                     .catch(function (error) {
                         console.error(error);
@@ -179,34 +195,44 @@
             var passwordReg = document.getElementById('passwordReg').value;
             var confirmPasswordReg = document.getElementById('confirmPasswordReg').value;
 
-            var data = {
+            var data0 = {
                 name: usernameReg,
                 email: emailReg,
                 password: passwordReg,
                 confirmPassword: confirmPasswordReg
             };
 
-            fetch(`http://test23.somee.com/publish/Account/Register`, {
+            var urlReg = "https://test23.somee.com/publish/Account/Register";
+            //var urlReg = "https://localhost:7251/Account/Register"
+            fetch(urlReg, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data0)
             })
                 .then(function (response) {
                     if (response.ok) {
                         console.log("REGISTRATION SUCCESSFUL");
-                        responseText = response.text();
-                        document.getElementById('response').innerText = responseText;
                         //window.location.href = "http://daliborg.8u.cz/Chatrum";
+                        return response.json();
                     } else {
                         console.log("REGISTRATION FAILED");
-                        document.getElementById('response').innerText = responseText;
+                        throw new Error(response.textContent);
                     }
                 })
                 .then(function (data) {
                     console.log(data);
-                    document.getElementById('response').innerText = data;
+                    console.log(data.succeeded);
+                    console.log(data.errors);
+                    const errorList = document.getElementById("response");
+                    errorList.innerHTML = '';
+                    data.errors.forEach(function (error) {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = error.description;
+                        errorList.appendChild(listItem);
+                    });
+                    //document.getElementById('response').innerText = data.errors;
                 })
                 .catch(function (error) {
                     console.log(error);
